@@ -182,7 +182,7 @@ function dados(id){ return lerJSON(etapa(id).chave); }
 function fmt(iso){ if(!iso) return ''; var d=new Date(iso); return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
 function faltaTexto(idx){
   var ant=TRILHA[idx-1]; var d=dados(ant.id)||{};
-  if(idx>1 && !etapaConcluida(TRILHA[idx-2].id)) return 'Destrava depois de concluir '+TRILHA.slice(0,idx).filter(function(t){return !etapaConcluida(t.id);}).map(function(t){return t.nome;}).join(' e ')+'.';
+  if(idx>1 && !etapaConcluida(TRILHA[idx-2].id)) return 'Destrava depois de concluir '+TRILHA.slice(0,idx).filter(function(t){return !etapaConcluida(t.id);}).map(function(t){return t.nome;}).join(', ').replace(/, ([^,]*)$/,' e $1')+'.';
   if(ant.id==='leitura'){ var p=d.progresso||{completos:0,total:12,chkPendentes:0}; var f=p.total-p.completos; return f>0?'Destrava quando você completar os '+p.total+' voos da Leitura Guiada (faltam '+f+').':'Destrava quando você responder a autoavaliação da Leitura Guiada ('+p.chkPendentes+' ponto(s)).'; }
   if(ant.id==='quiz'){ var n=d.resp?Object.keys(d.resp).length:0; return 'Destrava quando você enviar o Quiz'+(n?' ('+n+' de 15 respondidas)':'')+'.'; }
   if(ant.id==='resumo'){ var r=Math.round(d.rolagemMax||0); return 'Destrava quando você ler o Resumo até o fim e clicar em “Li o resumo até o fim”'+(r?' (rolagem: '+r+'%)':'')+'.'; }
