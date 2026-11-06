@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torre de Controle · Matemática 7º · Kit de Estudos</title>
+<style>
+:root{--bg:#0e1622;--bg2:#16212f;--bg3:#1c2a3b;--borda:#28394e;--borda2:#3a516b;--amarelo:#ffc933;--verde:#3ee08f;--laranja:#ff6b4a;--ceu:#5cc8ff;--texto:#eaf2fb;--cinza:#9fb0c3;--vermelho:#ff5d5d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:radial-gradient(1000px 500px at 50% -10%,#1d2d42,#0e1622 60%),var(--bg);color:var(--texto);line-height:1.65;font-size:17px;padding-bottom:60px}
+h1,h2,h3{font-family:'Trebuchet MS','Segoe UI',sans-serif;letter-spacing:.3px}
+.cod-voo{font-family:'Consolas','Lucida Console',monospace;letter-spacing:1px}
+header{padding:28px 18px 22px;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+header .selo{font-size:.78rem;letter-spacing:2px;color:#ffe9a6;text-transform:uppercase;font-family:'Consolas',monospace}
+header h1{font-size:1.75rem;margin:8px 0 4px}
+header p{color:#d6e2ef;font-size:.95rem}
+.pista{height:16px;background:#222c38;position:relative;box-shadow:0 3px 8px rgba(0,0,0,.45)}
+.pista:after{content:'';position:absolute;left:0;right:0;top:7px;height:3px;background:repeating-linear-gradient(90deg,var(--amarelo) 0 34px,transparent 34px 60px)}
+.wrap{max-width:880px;margin:0 auto;padding:16px}
+.barra-nav{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+.barra-nav a{flex:1 1 auto;text-align:center;text-decoration:none;color:var(--texto);background:var(--bg2);border:1px solid var(--borda);border-radius:10px;padding:8px 10px;font-size:.88rem}
+.barra-nav a.on{border-color:var(--amarelo);color:var(--amarelo);font-weight:bold}
+.barra-nav a.lock{opacity:.5;pointer-events:none;filter:grayscale(.7)}
+.intro{background:var(--bg2);border:1px solid var(--borda);border-radius:14px;padding:16px 18px;margin:14px 0}
+.intro h2{font-size:1.15rem;margin-bottom:8px;color:var(--amarelo)}
+.intro ol,.intro ul{margin:8px 0 0 22px}
+.painel{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:#122030;border:1px dashed var(--borda2);border-radius:12px;padding:10px 12px;margin:12px 0;font-size:.88rem;color:var(--cinza)}
+.painel .btns{display:flex;gap:6px;flex-wrap:wrap}
+button{font-family:inherit}
+.mini{background:var(--bg3);border:1px solid var(--borda2);color:var(--texto);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:.85rem}
+.mini:hover{border-color:var(--amarelo)}
+.postit{background:#ffe88a;color:#3a2a00;border-radius:4px;padding:12px 14px;box-shadow:3px 4px 10px rgba(0,0,0,.4);transform:rotate(-.8deg);margin:14px 0;font-size:.95rem}
+.postit b{color:#7a4a00}
+.alerta{background:#3a1712;border-left:5px solid var(--laranja);border-radius:0 12px 12px 0;padding:12px 14px;margin:14px 0;font-size:.95rem}
+.alerta b{color:#ffb39f}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(5,10,18,.86);z-index:60;align-items:center;justify-content:center;padding:16px}
+.modal-bg.show{display:flex}
+.modal{background:var(--bg2);border:2px solid var(--amarelo);border-radius:16px;padding:22px;max-width:440px;text-align:center}
+.modal .big{font-size:2.6rem}
+.modal p{margin-bottom:12px}
+.modal a,.modal button.ok{display:inline-block;background:var(--amarelo);color:#2a1d00;border:none;border-radius:10px;padding:10px 18px;font-weight:bold;text-decoration:none;cursor:pointer}
+.modal button.sec{background:transparent;border:1px solid var(--borda2);color:var(--texto);border-radius:10px;padding:10px 16px;margin-left:8px;cursor:pointer}
+.rodape{text-align:center;color:var(--cinza);font-size:.82rem;margin-top:26px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid var(--borda);padding:7px 9px;text-align:left;font-size:.9rem;vertical-align:top}
+th{background:#132233;color:var(--amarelo)}
+.trilha-fim{background:var(--bg2);border:2px solid var(--borda2);border-radius:14px;padding:16px;margin:20px 0;text-align:center}
+.trilha-fim .btn{display:inline-block;margin-top:10px;background:var(--verde);color:#032414;text-decoration:none;font-weight:bold;border-radius:10px;padding:10px 18px}
+.trilha-fim .btn.off{background:#2b3846;color:#7f8fa1;pointer-events:none}
+
+header{background:linear-gradient(120deg,#0e1622,#13314d 50%,#3a2a00);border-bottom:4px solid var(--amarelo)}
+header h1 .t{color:var(--amarelo)} header h1 .c{color:var(--ceu)}
+.ordem{text-align:center;font-weight:bold;margin:10px 0;color:#fff}
+.selo-pais{display:none;background:#122a1f;border:1px solid var(--verde);color:#8fe0b4;border-radius:10px;padding:10px 14px;margin:12px 0;text-align:center;font-weight:bold}
+.selo-pais.show{display:block}
+.selo-pais button{margin-left:10px;background:transparent;border:1px solid var(--verde);color:#8fe0b4;border-radius:8px;padding:4px 10px;cursor:pointer}
+.trilha{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:16px 0}
+.card{position:relative;background:var(--bg2);border:1px solid var(--borda);border-radius:16px;padding:16px;text-decoration:none;color:var(--texto);display:block;transition:transform .15s,box-shadow .15s}
+.card .passo{font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--cinza);font-family:Consolas,monospace}
+.card .emoji{font-size:2rem;margin:4px 0}
+.card h3{font-size:1.05rem;margin-bottom:6px}
+.card p{font-size:.86rem;color:#c9d6e3}
+.card .estado{margin-top:10px;font-size:.8rem;font-weight:bold;padding:6px 8px;border-radius:8px}
+.card.aberto{border-color:var(--verde)}
+.card.aberto:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(62,224,143,.25)}
+.card.aberto .estado{background:#0e2b1f;color:var(--verde)}
+.card.novo{animation:brilho 1.6s ease-in-out 3;border-color:var(--amarelo)}
+@keyframes brilho{0%,100%{box-shadow:0 0 0 rgba(255,201,51,0)}50%{box-shadow:0 0 22px rgba(255,201,51,.6)}}
+.card.novo .estado{background:#3a2e06;color:var(--amarelo)}
+.card.feito{border-color:var(--verde)}
+.card.feito .estado{background:#0e2b1f;color:#8fe0b4}
+.card.trancado{opacity:.55;filter:grayscale(.6);pointer-events:none;cursor:not-allowed}
+.card.trancado .estado{background:#26303b;color:var(--cinza)}
+.card .cadeado{position:absolute;top:10px;right:12px;font-size:1.3rem}
+.extras{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:10px 0 16px}
+.extra{background:#1a1a10;border:1px dashed var(--amarelo);border-radius:14px;padding:14px;text-decoration:none;color:var(--texto);display:block}
+.extra h3{font-size:1rem;color:var(--amarelo);margin-bottom:4px}
+.extra p{font-size:.85rem;color:#d8d2b8}
+.como,.cai{background:var(--bg2);border:1px solid var(--borda);border-radius:14px;padding:16px;margin:16px 0}
+.como h2{color:var(--verde);font-size:1.1rem;margin-bottom:8px}
+.como ol{margin-left:20px}.como li{margin-bottom:6px}
+.cai{border-left:5px solid var(--amarelo)}
+.cai h2{color:var(--amarelo);font-size:1.05rem;margin-bottom:6px}.cai p{margin-bottom:6px;font-size:.93rem}
+.rel{background:var(--bg2);border:1px dashed var(--verde);border-radius:14px;padding:16px;margin:16px 0}
+.rel h2{color:var(--verde);font-size:1.1rem;margin-bottom:8px}
+.rel input{padding:9px;border-radius:8px;border:1px solid var(--borda2);background:#0b1520;color:var(--texto);font-size:1rem;width:170px;text-transform:uppercase}
+.rel button{background:var(--verde);color:#032414;border:none;border-radius:8px;padding:9px 14px;font-weight:bold;margin-left:6px;cursor:pointer}
+.rel .out{margin-top:12px;font-size:.92rem}
+.rel .bloco{background:#101b28;border:1px solid var(--borda);border-radius:10px;padding:10px 12px;margin:8px 0}
+.rel .bloco b{color:var(--amarelo)}
+.rel .liberar{margin:10px 6px 0 0}
+.rel .perigo{background:#4a1717;color:#ffc9c9;border:1px solid var(--vermelho)}
+</style>
+</head>
+<body>
+
+<header><div class="selo">Kit de Estudos · Colégio Coração Feliz · Matemática · 7º ano</div>
+<h1>✈️ <span class="t">Torre</span> de <span class="c">Controle</span> 🛬</h1>
+<p>Cap. 15 Ângulos (Livro 1) · Cap. 16 Razão, Cap. 17 Proporção direta e Cap. 18 Proporção inversa (Livro 2) · Prova 12/11/2026</p></header>
+<div class="pista"></div>
+<div class="wrap">
+ <div class="intro"><h2>🎧 Bem-vindo à Torre, jovem aprendiz!</h2><p>Aqui você é um <b>controlador de voo em treinamento</b>. Para liberar a pista, precisa dominar os <b>ângulos</b> (as pistas e as curvas dos aviões), as <b>razões</b> (velocidade, escala dos mapas, densidade), a <b>proporção direta</b> (regra de três e porcentagem) e a <b>proporção inversa</b> (mais velocidade, menos tempo). Tudo foi feito a partir do seu livro (Callis Matemática 7 – Livro 1, cap. 15, pp. 324–340; Livro 2, cap. 16, pp. 8–20; cap. 17, pp. 30–44; cap. 18, pp. 54–60).</p>
+ <div class="ordem">Trilha: 📖 Leitura Guiada → 🎯 Quiz → 🗺️ Resumo → 📝 Simulado</div>
+ <p style="text-align:center;font-size:.9rem;color:var(--cinza)">Os materiais abrem <b>um por vez, na ordem</b>. Conclua um para destravar o próximo.</p></div>
+ <div class="selo-pais" id="selo-pais">🔓 Trilha liberada pelos pais <button onclick="trancar()">Trancar de novo</button></div>
+ <div class="trilha" id="trilha"></div>
+ <h2 style="font-size:1.05rem;color:var(--amarelo);margin-top:6px">🖨️ Extras para imprimir (sempre abertos)</h2>
+ <div class="extras">
+  <a class="extra" href="folha_de_problemas.html"><h3>✏️ Folha de Problemas — Plano de Voo</h3><p>5 problemas no estilo da professora, com espaço para <b>mostrar os cálculos</b>. Dá para imprimir. O resultado só aparece com os 5 marcados (sem comentários: só certo ou errado).</p></a>
+  <a class="extra" href="mapa_mental_folha_de_regras.pdf" target="_blank"><h3>📄 Cartão de Bordo — Folha de Regras (PDF)</h3><p>Todas as regras dos 4 capítulos numa página A4, por cor. Para colar na parede ou revisar na véspera.</p></a>
+ </div>
+ <div class="como"><h2>📌 Como usar este material</h2><ol>
+  <li><b>Leitura Guiada</b> (12 voos): leia, <b>escreva</b> as respostas com as suas palavras e faça a fixação de cada voo (70% para avançar). Os 12 voos completos destravam o Quiz.</li>
+  <li><b>Quiz</b> (15 questões): teste o que entendeu enquanto está fresco. Enviar o Quiz destrava o Resumo.</li>
+  <li><b>Resumo</b> (Painel de Instrumentos): feche as dúvidas que o Quiz mostrou. Ler até o fim e clicar em “Li o resumo até o fim” destrava o Simulado.</li>
+  <li><b>Simulado</b> (28 questões no estilo da prova): valendo, como se fosse a prova de verdade.</li>
+  <li>Depois do Simulado, <b>tudo fica aberto</b> para revisar até a prova. A <b>Folha de Problemas</b> pode ser feita a qualquer momento, no papel.</li></ol>
+  <p style="margin-top:8px;font-size:.88rem;color:var(--cinza)">O progresso fica salvo automaticamente no navegador deste aparelho. Dá para exportar/importar em cada material.</p></div>
+ <div class="cai"><h2>🧭 O que cai na prova (12/11)</h2>
+  <p><b>Cap. 15 — Ângulos (Livro 1, pp. 324–340):</b> graus, minutos e segundos; transformações; adição, subtração, multiplicação e divisão de medidas de ângulos; ângulos opostos pelo vértice; paralelas cortadas por transversal (correspondentes, alternos e colaterais).</p>
+  <p><b>Cap. 16 — Razão (Livro 2, pp. 8–20):</b> razão; densidade demográfica; velocidade média; escala; proporção e propriedade fundamental.</p>
+  <p><b>Cap. 17 — Proporção direta (Livro 2, pp. 30–44):</b> grandezas diretamente proporcionais e constante k; regra de três simples e direta; porcentagem, aumentos e reduções, porcentagem de porcentagem.</p>
+  <p><b>Cap. 18 — Proporção inversa (Livro 2, pp. 54–60):</b> grandezas inversamente proporcionais; constante X · Y = k; regra de três inversa.</p></div>
+ <div class="postit">📌 <b>Dica para os pais:</b> ao enviar o Quiz e o Simulado, aparecem os códigos <b>MED</b> e <b>SIM</b>: peça que a criança anote e digite aqui embaixo para ver o relatório (e abrir os gabaritos comentados). O código <b>PAIS-77</b> mostra tudo e também <b>libera a trilha inteira</b>. O progresso é do navegador de cada aparelho: se a Leitura foi feita no tablet e o Quiz vai ser no computador, use 📥 Exportar / 📤 Importar — ou libere a trilha com PAIS-77. Na prova a professora cobra <b>“mostre os cálculos”</b>: confira as contas da Folha de Problemas.</div>
+ <div class="rel"><h2>📊 Relatório para os pais</h2><p>Digite um dos códigos: <b>MED-…</b> (do Quiz), <b>SIM-…</b> (do Simulado) ou o código fixo da família <b>PAIS-77</b> (mostra tudo e permite liberar a trilha).</p>
+  <div style="margin-top:8px"><input id="cod-in" placeholder="PAIS-77"><button onclick="verRelatorio()">🔓 Ver relatório</button></div><div class="out" id="rel-out"></div></div>
+ <div class="rodape">Feito com carinho para o jovem aprendiz. ✈️🛫🛬 Boa prova!</div>
+</div>
+<div class="modal-bg" id="modal"><div class="modal"><p id="modal-txt"></p><button class="ok" id="modal-ok">Ok</button><button class="sec" id="modal-cancel" style="display:none">Cancelar</button></div></div>
+<script>
+var KIT='torre_ctrl_m7';
+var TRILHA=[
+ {id:'leitura', chave:KIT+'_leitura_v1', nome:'Leitura Guiada', arquivo:'leitura-guiada.html', emoji:'📖'},
+ {id:'quiz', chave:KIT+'_quiz_v1', nome:'Quiz', arquivo:'quiz.html', emoji:'🎯'},
+ {id:'resumo', chave:KIT+'_resumo_v1', nome:'Resumo', arquivo:'resumo.html', emoji:'🗺️'},
+ {id:'simulado', chave:KIT+'_simulado_v1', nome:'Simulado', arquivo:'simulado.html', emoji:'📝'}
+];
+var MEM={};
+function lerJSON(k){ try{ var s=localStorage.getItem(k); return s?JSON.parse(s):(MEM[k]?JSON.parse(MEM[k]):null); }catch(e){ return MEM[k]?JSON.parse(MEM[k]):null; } }
+function gravarJSON(k,v){ var s=JSON.stringify(v); try{ localStorage.setItem(k,s); }catch(e){ MEM[k]=s; } }
+function trilhaLiberada(){ var t=lerJSON(KIT+'_trilha_v1'); return !!(t&&t.liberadoPelosPais); }
+function etapa(id){ return TRILHA.filter(function(t){return t.id===id;})[0]; }
+function etapaConcluida(id){ var d=lerJSON(etapa(id).chave); return !!(d&&d.concluido); }
+function idxEtapa(id){ return TRILHA.map(function(t){return t.id;}).indexOf(id); }
+function podeAbrir(id){ var i=idxEtapa(id); if(i<=0||trilhaLiberada()) return true; return etapaConcluida(TRILHA[i-1].id); }
+function marcarNav(){
+  var links=document.querySelectorAll('#nav a[data-etapa]');
+  for(var i=0;i<links.length;i++){ var id=links[i].getAttribute('data-etapa'); var t=links[i].getAttribute('data-txt');
+    if(!podeAbrir(id)){ links[i].classList.add('lock'); links[i].textContent='🔒 '+t; links[i].title='Ainda trancado'; }
+    else { links[i].classList.remove('lock'); links[i].textContent=t; links[i].title=''; } }
+}
+function textoTrava(id){
+  var nomes=[]; var i=idxEtapa(id);
+  for(var k=0;k<i;k++){ if(!etapaConcluida(TRILHA[k].id)) nomes.push(TRILHA[k].nome); }
+  return 'Para abrir '+(id==='quiz'?'o Quiz':id==='resumo'?'o Resumo':'o Simulado')+', conclua antes: '+nomes.join(', ')+'.';
+}
+function checarTrava(id){
+  if(podeAbrir(id)) return true;
+  document.getElementById('lock-txt').textContent=textoTrava(id);
+  document.getElementById('lock').classList.add('show');
+  var w=document.querySelector('.wrap'); w.style.filter='blur(9px)'; w.style.pointerEvents='none'; w.setAttribute('aria-hidden','true');
+  return false;
+}
+
+function mostrarModal(txt,confirmar,fn){ document.getElementById('modal-txt').innerHTML=txt; document.getElementById('modal').classList.add('show'); var c=document.getElementById('modal-cancel'); c.style.display=confirmar?'inline-block':'none'; c.onclick=fecharModal; var ok=document.getElementById('modal-ok'); ok.textContent=confirmar?'Sim, apagar':'Ok'; ok.onclick=function(){ fecharModal(); if(fn) fn(); }; }
+function fecharModal(){ document.getElementById('modal').classList.remove('show'); }
+function carimbo(){ var d=new Date(); var el=document.getElementById('salvo'); if(el) el.textContent='💾 Salvo às '+d.toLocaleTimeString('pt-BR')+' de '+d.toLocaleDateString('pt-BR'); }
+function baixarJSON(obj,nome){ var blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nome; document.body.appendChild(a); a.click(); a.remove(); }
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function embaralhar(arr,rnd){ var a=arr.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(rnd()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+var LETRAS='ABCDEFGHJKLMNPQRSTUVWXYZ';
+function gerarCodigo(pref,ac){ var xx=(ac<10?'0':'')+ac; return pref+'-'+xx+'-'+LETRAS[Math.floor(Math.random()*LETRAS.length)]+LETRAS[Math.floor(Math.random()*LETRAS.length)]; }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+var DESC={
+ leitura:{arq:'leitura-guiada.html',d:'12 voos com o conteúdo explicado, 3 perguntas para escrever com as suas palavras e uma fixação de 4 contas (70% para avançar).'},
+ quiz:{arq:'quiz.html',d:'Checagem Pré-Voo: 15 questões rápidas. Código MED e gabarito comentado.'},
+ resumo:{arq:'resumo.html',d:'Painel de Instrumentos: regras em cards, cartas para virar, quadro direta × inversa, post-its e pegadinhas.'},
+ simulado:{arq:'simulado.html',d:'Exame de Voo Solo: 28 questões no estilo da prova (múltipla escolha, somatório, romanos e discursiva).'}
+};
+function dados(id){ return lerJSON(etapa(id).chave); }
+function fmt(iso){ if(!iso) return ''; var d=new Date(iso); return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function faltaTexto(idx){
+  var ant=TRILHA[idx-1]; var d=dados(ant.id)||{};
+  if(idx>1 && !etapaConcluida(TRILHA[idx-2].id)) return 'Destrava depois de concluir '+TRILHA.slice(0,idx).filter(function(t){return !etapaConcluida(t.id);}).map(function(t){return t.nome;}).join(' e ')+'.';
+  if(ant.id==='leitura'){ var p=d.progresso||{completos:0,total:12,chkPendentes:0}; var f=p.total-p.completos; return f>0?'Destrava quando você completar os '+p.total+' voos da Leitura Guiada (faltam '+f+').':'Destrava quando você responder a autoavaliação da Leitura Guiada ('+p.chkPendentes+' ponto(s)).'; }
+  if(ant.id==='quiz'){ var n=d.resp?Object.keys(d.resp).length:0; return 'Destrava quando você enviar o Quiz'+(n?' ('+n+' de 15 respondidas)':'')+'.'; }
+  if(ant.id==='resumo'){ var r=Math.round(d.rolagemMax||0); return 'Destrava quando você ler o Resumo até o fim e clicar em “Li o resumo até o fim”'+(r?' (rolagem: '+r+'%)':'')+'.'; }
+  return 'Destrava quando você concluir '+ant.nome+'.';
+}
+function renderTrilha(){
+  var h='';
+  TRILHA.forEach(function(t,idx){ var feito=etapaConcluida(t.id), aberto=podeAbrir(t.id); var cls='card', estado='', cad='';
+    if(feito){ cls+=' feito'; estado='✅ Concluído · '+fmt(dados(t.id).concluidoEm); }
+    else if(aberto){ var novo=(idx>0 && etapaConcluida(TRILHA[idx-1].id) && !trilhaLiberada()); cls+=novo?' novo':' aberto'; estado=novo?'✨ Novo destravado — pode começar!':(idx===0?'▶️ Comece por aqui':'▶️ Aberto'); }
+    else { cls+=' trancado'; cad='<span class="cadeado">🔒</span>'; estado='🔒 '+faltaTexto(idx); }
+    h+='<a class="'+cls+'" href="'+(aberto?DESC[t.id].arq:'#')+'"'+(aberto?'':' tabindex="-1" aria-disabled="true" onclick="return false"')+'>'+cad+'<div class="passo">Passo '+(idx+1)+'</div><div class="emoji">'+t.emoji+'</div><h3>'+t.nome+'</h3><p>'+DESC[t.id].d+'</p><div class="estado">'+estado+'</div></a>'; });
+  document.getElementById('trilha').innerHTML=h;
+  document.getElementById('selo-pais').classList.toggle('show',trilhaLiberada());
+}
+function relLeitura(){ var e=dados('leitura'); if(!e||!e.blocos) return 'Ainda não há registro da Leitura Guiada.'; var p=e.progresso||{}; var red=0,nao=0,lista=[],fix=[];
+  Object.keys(e.blocos).forEach(function(i){ var b=e.blocos[i]; var v='VOO '+(+i<9?'0':'')+(+i+1); if(b.fix&&b.fix.tentativas) fix.push(v+': '+(b.fix.aprovado?'✅':'❌')+' '+b.fix.melhor+'/4 ('+b.fix.tentativas+'x)');
+    if(b.perguntas) Object.keys(b.perguntas).forEach(function(j){ var q=b.perguntas[j]; if(q.red){ red++; lista.push(v+', pergunta '+(+j+1)+': resposta muito parecida com o texto'); } if(q.chk) Object.keys(q.chk).forEach(function(k){ if(q.chk[k]==='nao'){ nao++; lista.push(v+', pergunta '+(+j+1)+': ponto marcado “Não”'); } }); }); });
+  return '<b>Voos completos:</b> '+(p.completos||0)+' de 12 (conferidos: '+(p.conferidos||0)+').<br><b>Respostas vermelhas (parecidas com o texto):</b> '+red+'.<br><b>Pontos “Não” na autoavaliação:</b> '+nao+'.<br><b>Fixação:</b> '+(fix.length?fix.join(' · '):'ainda não feita')+'.'+(lista.length?'<ul style="margin:6px 0 0 18px">'+lista.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>':''); }
+function relQuiz(){ var e=dados('quiz'); if(!e) return 'Ainda não há registro do Quiz.'; if(!e.enviado) return 'Quiz iniciado ('+Object.keys(e.resp||{}).length+' de 15 respondidas), ainda não enviado.'; return '<b>Enviado</b> em '+fmt(e.enviadoEm)+'. Acertos: <b>'+e.acertos+' de 15</b>. Código: '+e.codigo+'.'; }
+function relResumo(){ var e=dados('resumo'); if(!e) return 'Ainda não há registro do Resumo.'; return '<b>Rolagem máxima:</b> '+Math.round(e.rolagemMax||0)+'%. '+(e.concluido?'Lido até o fim em '+fmt(e.concluidoEm)+'.':'Ainda não confirmou a leitura até o fim.'); }
+function relSim(){ var e=dados('simulado'); if(!e) return 'Ainda não há registro do Simulado.'; if(!e.enviado) return 'Simulado iniciado ('+Object.keys(e.resp||{}).length+' de 28 respondidas), ainda não enviado.'; return '<b>Enviado</b> em '+fmt(e.enviadoEm)+'. Acertos: <b>'+e.acertos+' de '+(e.objetivas||27)+'</b> objetivas (+ 1 discursiva para os pais corrigirem com a resposta-modelo). Código: '+e.codigo+'.'; }
+function relFolha(){ var e=lerJSON(KIT+'_folha_v1'); if(!e) return 'Ainda não foi feita neste aparelho (pode ter sido feita no papel).'; if(!e.revelado) return 'Marcações em andamento ('+Object.keys(e.resp||{}).length+' de 5).'; return 'Resultado: <b>'+e.acertos+' de 5</b> ('+fmt(e.reveladoEm)+'). Peça para ver os cálculos!'; }
+function relTrilha(){ var h='<ul style="margin-left:18px">'; TRILHA.forEach(function(t){ var d=dados(t.id); h+='<li>'+t.emoji+' '+t.nome+': '+((d&&d.concluido)?'<span style="color:#8fe0b4">concluído em '+fmt(d.concluidoEm)+'</span>':'<span style="color:#ffb3b3">não concluído</span>')+'</li>'; }); h+='</ul>';
+  var tr=lerJSON(KIT+'_trilha_v1'); if(tr&&tr.liberadoPelosPais) h+='<p>🔓 Trilha liberada pelos pais em '+fmt(tr.liberadoEm)+'.</p>'; else if(tr&&tr.liberadoEm) h+='<p>A trilha foi liberada pelos pais em '+fmt(tr.liberadoEm)+' e trancada de novo em '+fmt(tr.trancadoEm)+'.</p>'; return h; }
+function verRelatorio(){
+  var v=document.getElementById('cod-in').value.trim().toUpperCase(); var out=document.getElementById('rel-out');
+  var q=dados('quiz')||{}, s=dados('simulado')||{}; var tudo=(v==='PAIS-77'), okQ=(q.codigo&&v===q.codigo), okS=(s.codigo&&v===s.codigo);
+  if(!tudo&&!okQ&&!okS){ out.innerHTML='<span style="color:#ffb3b3">Código não reconhecido.</span>'; return; }
+  var h='';
+  if(tudo||okQ) h+='<div class="bloco"><b>📖 Leitura Guiada</b><br>'+relLeitura()+'</div><div class="bloco"><b>🎯 Quiz</b><br>'+relQuiz()+'</div>';
+  if(tudo) h+='<div class="bloco"><b>🗺️ Resumo</b><br>'+relResumo()+'</div>';
+  if(tudo||okS) h+='<div class="bloco"><b>📝 Simulado</b><br>'+relSim()+'</div>';
+  if(tudo){ h+='<div class="bloco"><b>✏️ Folha de Problemas</b><br>'+relFolha()+'</div><div class="bloco"><b>🛤️ Trilha</b>'+relTrilha()+'</div>';
+    h+=trilhaLiberada()?'<button class="liberar" onclick="trancar()">🔒 Trancar a trilha de novo</button>':'<button class="liberar" onclick="liberar()">🔓 Liberar todos os materiais</button>';
+    h+='<button class="perigo" onclick="pedirZerarKit()">🗑️ Zerar o kit inteiro</button>'; }
+  out.innerHTML=h;
+}
+function liberar(){ var t=lerJSON(KIT+'_trilha_v1')||{}; t.liberadoPelosPais=true; t.liberadoEm=new Date().toISOString(); gravarJSON(KIT+'_trilha_v1',t); renderTrilha(); verRelatorio(); }
+function trancar(){ var t=lerJSON(KIT+'_trilha_v1')||{}; t.liberadoPelosPais=false; t.trancadoEm=new Date().toISOString(); gravarJSON(KIT+'_trilha_v1',t); renderTrilha(); if(document.getElementById('rel-out').innerHTML) verRelatorio(); }
+function pedirZerarKit(){ mostrarModal('Apagar TODO o progresso do kit (leitura, quiz, resumo, simulado, folha de problemas e trilha)? A criança volta ao começo, só com a Leitura Guiada aberta.',true,function(){ TRILHA.forEach(function(t){ try{ localStorage.removeItem(t.chave); }catch(e){} delete MEM[t.chave]; }); [KIT+'_trilha_v1',KIT+'_folha_v1'].forEach(function(k){ try{ localStorage.removeItem(k); }catch(e){} delete MEM[k]; }); renderTrilha(); document.getElementById('rel-out').innerHTML='<span style="color:#8fe0b4">Kit zerado.</span>'; }); }
+renderTrilha();
+window.addEventListener('pageshow',renderTrilha);
+</script>
+</body>
+</html>

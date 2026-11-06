@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz · Torre de Controle · Matemática 7º</title>
+<style>
+:root{--bg:#0e1622;--bg2:#16212f;--bg3:#1c2a3b;--borda:#28394e;--borda2:#3a516b;--amarelo:#ffc933;--verde:#3ee08f;--laranja:#ff6b4a;--ceu:#5cc8ff;--texto:#eaf2fb;--cinza:#9fb0c3;--vermelho:#ff5d5d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:radial-gradient(1000px 500px at 50% -10%,#1d2d42,#0e1622 60%),var(--bg);color:var(--texto);line-height:1.65;font-size:17px;padding-bottom:60px}
+h1,h2,h3{font-family:'Trebuchet MS','Segoe UI',sans-serif;letter-spacing:.3px}
+.cod-voo{font-family:'Consolas','Lucida Console',monospace;letter-spacing:1px}
+header{padding:28px 18px 22px;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+header .selo{font-size:.78rem;letter-spacing:2px;color:#ffe9a6;text-transform:uppercase;font-family:'Consolas',monospace}
+header h1{font-size:1.75rem;margin:8px 0 4px}
+header p{color:#d6e2ef;font-size:.95rem}
+.pista{height:16px;background:#222c38;position:relative;box-shadow:0 3px 8px rgba(0,0,0,.45)}
+.pista:after{content:'';position:absolute;left:0;right:0;top:7px;height:3px;background:repeating-linear-gradient(90deg,var(--amarelo) 0 34px,transparent 34px 60px)}
+.wrap{max-width:880px;margin:0 auto;padding:16px}
+.barra-nav{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+.barra-nav a{flex:1 1 auto;text-align:center;text-decoration:none;color:var(--texto);background:var(--bg2);border:1px solid var(--borda);border-radius:10px;padding:8px 10px;font-size:.88rem}
+.barra-nav a.on{border-color:var(--amarelo);color:var(--amarelo);font-weight:bold}
+.barra-nav a.lock{opacity:.5;pointer-events:none;filter:grayscale(.7)}
+.intro{background:var(--bg2);border:1px solid var(--borda);border-radius:14px;padding:16px 18px;margin:14px 0}
+.intro h2{font-size:1.15rem;margin-bottom:8px;color:var(--amarelo)}
+.intro ol,.intro ul{margin:8px 0 0 22px}
+.painel{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:#122030;border:1px dashed var(--borda2);border-radius:12px;padding:10px 12px;margin:12px 0;font-size:.88rem;color:var(--cinza)}
+.painel .btns{display:flex;gap:6px;flex-wrap:wrap}
+button{font-family:inherit}
+.mini{background:var(--bg3);border:1px solid var(--borda2);color:var(--texto);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:.85rem}
+.mini:hover{border-color:var(--amarelo)}
+.postit{background:#ffe88a;color:#3a2a00;border-radius:4px;padding:12px 14px;box-shadow:3px 4px 10px rgba(0,0,0,.4);transform:rotate(-.8deg);margin:14px 0;font-size:.95rem}
+.postit b{color:#7a4a00}
+.alerta{background:#3a1712;border-left:5px solid var(--laranja);border-radius:0 12px 12px 0;padding:12px 14px;margin:14px 0;font-size:.95rem}
+.alerta b{color:#ffb39f}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(5,10,18,.86);z-index:60;align-items:center;justify-content:center;padding:16px}
+.modal-bg.show{display:flex}
+.modal{background:var(--bg2);border:2px solid var(--amarelo);border-radius:16px;padding:22px;max-width:440px;text-align:center}
+.modal .big{font-size:2.6rem}
+.modal p{margin-bottom:12px}
+.modal a,.modal button.ok{display:inline-block;background:var(--amarelo);color:#2a1d00;border:none;border-radius:10px;padding:10px 18px;font-weight:bold;text-decoration:none;cursor:pointer}
+.modal button.sec{background:transparent;border:1px solid var(--borda2);color:var(--texto);border-radius:10px;padding:10px 16px;margin-left:8px;cursor:pointer}
+.rodape{text-align:center;color:var(--cinza);font-size:.82rem;margin-top:26px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid var(--borda);padding:7px 9px;text-align:left;font-size:.9rem;vertical-align:top}
+th{background:#132233;color:var(--amarelo)}
+.trilha-fim{background:var(--bg2);border:2px solid var(--borda2);border-radius:14px;padding:16px;margin:20px 0;text-align:center}
+.trilha-fim .btn{display:inline-block;margin-top:10px;background:var(--verde);color:#032414;text-decoration:none;font-weight:bold;border-radius:10px;padding:10px 18px}
+.trilha-fim .btn.off{background:#2b3846;color:#7f8fa1;pointer-events:none}
+
+.codigo{display:none;position:sticky;top:0;z-index:20;text-align:center;border-radius:0 0 14px 14px;padding:10px;margin:-16px 0 12px;font-weight:bold}
+.codigo.show{display:block}
+.codigo .cod{font-family:Consolas,monospace;font-size:1.6rem;letter-spacing:3px}
+.progresso{background:#101b28;border:1px solid var(--borda);border-radius:10px;height:14px;overflow:hidden;margin:8px 0 2px}
+.progresso div{height:100%;width:0;transition:width .3s}
+#cont{font-size:.85rem;color:var(--cinza)}
+.q{background:var(--bg2);border:1px solid var(--borda);border-radius:14px;padding:14px 16px;margin:14px 0}
+.q .num{font-size:.78rem;color:var(--cinza);margin-top:4px}
+.q h3{font-size:1.04rem;margin:4px 0 10px;font-family:'Segoe UI',sans-serif;font-weight:600;line-height:1.5}
+.tipo{font-size:.7rem;border-radius:20px;padding:2px 9px;font-weight:bold;text-transform:uppercase}
+.tipo.mc{background:#1e4f8a;color:#d7e9ff}.tipo.som{background:#7a5a00;color:#ffe9a6}.tipo.rom{background:#5a2a8a;color:#ecdcff}.tipo.dis{background:#1f6b45;color:#c9f7df}
+.capq{font-size:.72rem;color:var(--cinza);border:1px solid var(--borda2);border-radius:20px;padding:1px 8px}
+.alt{display:block;border:1px solid var(--borda2);border-radius:10px;padding:9px 11px;margin:6px 0;cursor:pointer;background:#101b28}
+.alt.sel{border-color:var(--amarelo);background:#1e2a1a}
+.alt.certa{background:#0f3a24;border:2px solid var(--verde)}
+.alt.errada{background:#1d242d;color:#aeb8c4;border-color:#3a4552}
+.alt.marcada{background:#2b2f36;color:#c7ced6;border:2px dashed #8a95a3}
+.alt .exp{font-size:.86rem;margin-top:5px;color:#b8c4cf}
+.alt.certa .exp{color:#b9f5d4}
+.afirm{border-left:3px solid var(--borda2);padding:6px 10px;margin:6px 0;background:#101b28;border-radius:0 8px 8px 0}
+.afirm.ok{border-left-color:var(--verde)}.afirm.no{border-left-color:#7a8592}
+.afirm .exp{font-size:.86rem;color:#b8c4cf;margin-top:4px}
+.soma{margin-top:10px}
+.soma input{width:90px;padding:7px;border-radius:8px;border:1px solid var(--borda2);background:#0b1520;color:var(--texto);font-size:1rem}
+.ok-t{color:var(--verde);font-weight:bold}.no-t{color:#c7ced6}
+textarea{width:100%;min-height:120px;background:#0b1520;color:var(--texto);border:1px solid var(--borda2);border-radius:10px;padding:10px;font-family:inherit;font-size:1rem}
+.modelo-d{margin-top:10px;background:#0f2a1e;border:1px solid #2c7a52;border-radius:10px;padding:10px;font-size:.93rem}
+.enviar{display:block;width:100%;margin:18px 0;border:none;border-radius:12px;padding:14px;font-weight:bold;font-size:1.02rem;cursor:pointer}
+.enviar:disabled{background:#2b3846!important;color:#7f8fa1!important;cursor:not-allowed}
+.gab{display:none;background:var(--bg2);border:2px dashed var(--amarelo);border-radius:14px;padding:14px;margin:14px 0}
+.gab.show{display:block}
+.gab input{padding:9px;border-radius:8px;border:1px solid var(--borda2);background:#0b1520;color:var(--texto);font-size:1rem;width:170px;text-transform:uppercase;margin:8px 6px 0 0}
+.gab button{background:var(--amarelo);color:#2a1d00;border:none;border-radius:8px;padding:9px 14px;font-weight:bold;cursor:pointer}
+.gab .msg{margin-top:8px}
+.fim{background:#0f2a1e;border:1px solid var(--verde);border-radius:14px;padding:14px;margin:14px 0;text-align:center}
+.fim a{color:var(--amarelo);font-weight:bold}
+
+header{background:linear-gradient(120deg,#0b3a5a,#155e86 50%,#0e2a3d);border-bottom:4px solid var(--ceu)}
+.codigo{background:var(--ceu);color:#06223a}
+.progresso div{background:linear-gradient(90deg,var(--ceu),var(--amarelo))}
+.enviar{background:var(--ceu);color:#06223a}
+</style>
+</head>
+<body>
+<header><div class="selo">Torre de Controle · Matemática 7º ano · CCF</div><h1>🎯 Quiz — Checagem Pré-Voo</h1><p>15 questões objetivas sobre os 12 voos · Código MED · Gabarito comentado</p></header><div class="pista"></div><div class="wrap"><nav class="barra-nav" id="nav"><a href="leitura-guiada.html">📖 Leitura Guiada</a><a class="on" href="quiz.html">🎯 Quiz</a><a href="resumo.html" data-etapa="resumo" data-txt="🗺️ Resumo">🗺️ Resumo</a><a href="simulado.html" data-etapa="simulado" data-txt="📝 Simulado">📝 Simulado</a><a href="index.html">🏠 Torre (início)</a></nav>
+  <div class="codigo" id="codigo"><div>🔑 Seu código de liberação (anote e mostre aos pais)</div><div class="cod" id="cod"></div></div>
+  <div class="intro"><h2>🛫 Antes de decolar, a checagem!</h2><p>Teste agora o que você aprendeu na Leitura Guiada, enquanto está fresco. São <b>15 questões</b>, todas obrigatórias. Faça as contas no caderno. Depois de enviar, as respostas <b>travam</b> e aparece o código <b>MED</b> no topo. Enviar o Quiz destrava o <b>🗺️ Resumo</b>.</p></div><div class="painel"><span id="salvo">💾 Progresso salvo automaticamente neste aparelho.</span><div class="btns"><button class="mini" onclick="exportar()">📥 Exportar progresso</button><button class="mini" onclick="document.getElementById('imp').click()">📤 Importar progresso</button><input type="file" id="imp" accept="application/json" style="display:none" onchange="importar(event)"><button class="mini" onclick="pedirZerar()">🗑️ Zerar tudo</button></div></div>
+  <div class="progresso"><div id="barra"></div></div><div id="cont"></div>
+  <div id="questoes"></div>
+  <button class="enviar" id="btn-enviar" onclick="enviar()" disabled>📨 Enviar (responda todas)</button>
+  <div class="gab" id="gab"><b>🔑 Gabarito comentado:</b> digite o código que apareceu no topo (ou o código da família).<br><input id="gab-in" placeholder='MED-XX-YY'><button onclick="abrirGab()">Ver gabarito</button><div class="msg" id="gab-msg"></div></div>
+  <div class="fim" id="fim" style="display:none">✅ Checagem concluída! O <a href="resumo.html">🗺️ Resumo (Painel de Instrumentos)</a> foi destravado. Use-o para fechar as dúvidas que o Quiz mostrou.</div>
+  <div class="rodape">Feito com carinho para o jovem aprendiz. ✈️ Boa prova!</div>
+</div><div class="modal-bg" id="lock"><div class="modal"><div class="big">🔒</div><p><b>Esta etapa ainda está trancada.</b></p><p id="lock-txt"></p><a href="index.html">Voltar ao início</a></div></div><div class="modal-bg" id="modal"><div class="modal"><p id="modal-txt"></p><button class="ok" id="modal-ok">Ok</button><button class="sec" id="modal-cancel" style="display:none">Cancelar</button></div></div>
+<script>
+var KIT='torre_ctrl_m7';
+var TRILHA=[
+ {id:'leitura', chave:KIT+'_leitura_v1', nome:'Leitura Guiada', arquivo:'leitura-guiada.html', emoji:'📖'},
+ {id:'quiz', chave:KIT+'_quiz_v1', nome:'Quiz', arquivo:'quiz.html', emoji:'🎯'},
+ {id:'resumo', chave:KIT+'_resumo_v1', nome:'Resumo', arquivo:'resumo.html', emoji:'🗺️'},
+ {id:'simulado', chave:KIT+'_simulado_v1', nome:'Simulado', arquivo:'simulado.html', emoji:'📝'}
+];
+var MEM={};
+function lerJSON(k){ try{ var s=localStorage.getItem(k); return s?JSON.parse(s):(MEM[k]?JSON.parse(MEM[k]):null); }catch(e){ return MEM[k]?JSON.parse(MEM[k]):null; } }
+function gravarJSON(k,v){ var s=JSON.stringify(v); try{ localStorage.setItem(k,s); }catch(e){ MEM[k]=s; } }
+function trilhaLiberada(){ var t=lerJSON(KIT+'_trilha_v1'); return !!(t&&t.liberadoPelosPais); }
+function etapa(id){ return TRILHA.filter(function(t){return t.id===id;})[0]; }
+function etapaConcluida(id){ var d=lerJSON(etapa(id).chave); return !!(d&&d.concluido); }
+function idxEtapa(id){ return TRILHA.map(function(t){return t.id;}).indexOf(id); }
+function podeAbrir(id){ var i=idxEtapa(id); if(i<=0||trilhaLiberada()) return true; return etapaConcluida(TRILHA[i-1].id); }
+function marcarNav(){
+  var links=document.querySelectorAll('#nav a[data-etapa]');
+  for(var i=0;i<links.length;i++){ var id=links[i].getAttribute('data-etapa'); var t=links[i].getAttribute('data-txt');
+    if(!podeAbrir(id)){ links[i].classList.add('lock'); links[i].textContent='🔒 '+t; links[i].title='Ainda trancado'; }
+    else { links[i].classList.remove('lock'); links[i].textContent=t; links[i].title=''; } }
+}
+function textoTrava(id){
+  var nomes=[]; var i=idxEtapa(id);
+  for(var k=0;k<i;k++){ if(!etapaConcluida(TRILHA[k].id)) nomes.push(TRILHA[k].nome); }
+  return 'Para abrir '+(id==='quiz'?'o Quiz':id==='resumo'?'o Resumo':'o Simulado')+', conclua antes: '+nomes.join(', ')+'.';
+}
+function checarTrava(id){
+  if(podeAbrir(id)) return true;
+  document.getElementById('lock-txt').textContent=textoTrava(id);
+  document.getElementById('lock').classList.add('show');
+  var w=document.querySelector('.wrap'); w.style.filter='blur(9px)'; w.style.pointerEvents='none'; w.setAttribute('aria-hidden','true');
+  return false;
+}
+
+function mostrarModal(txt,confirmar,fn){ document.getElementById('modal-txt').innerHTML=txt; document.getElementById('modal').classList.add('show'); var c=document.getElementById('modal-cancel'); c.style.display=confirmar?'inline-block':'none'; c.onclick=fecharModal; var ok=document.getElementById('modal-ok'); ok.textContent=confirmar?'Sim, apagar':'Ok'; ok.onclick=function(){ fecharModal(); if(fn) fn(); }; }
+function fecharModal(){ document.getElementById('modal').classList.remove('show'); }
+function carimbo(){ var d=new Date(); var el=document.getElementById('salvo'); if(el) el.textContent='💾 Salvo às '+d.toLocaleTimeString('pt-BR')+' de '+d.toLocaleDateString('pt-BR'); }
+function baixarJSON(obj,nome){ var blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nome; document.body.appendChild(a); a.click(); a.remove(); }
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function embaralhar(arr,rnd){ var a=arr.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(rnd()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+var LETRAS='ABCDEFGHJKLMNPQRSTUVWXYZ';
+function gerarCodigo(pref,ac){ var xx=(ac<10?'0':'')+ac; return pref+'-'+xx+'-'+LETRAS[Math.floor(Math.random()*LETRAS.length)]+LETRAS[Math.floor(Math.random()*LETRAS.length)]; }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+var ETAPA='quiz', PREF='MED', NOME_ARQ='quiz_torre-de-controle.json';
+var Q=[{"tipo": "mc", "cap": "Cap. 15", "p": "Na torre, um radar marca um desvio de 1° 2'. Quantos segundos isso representa?", "alts": [{"t": "3 720''", "e": "1° = 3 600'' e 2' = 120''; 3 600 + 120 = 3 720''."}, {"t": "62''", "e": "62 é o total em minutos (60' + 2'), não em segundos."}, {"t": "1 200''", "e": "Faltou transformar o 1° (3 600'')."}, {"t": "3 602''", "e": "Os 2' valem 120'', não 2''."}]}, {"tipo": "mc", "cap": "Cap. 15", "p": "Calcule 18° 47' + 25° 38'.", "alts": [{"t": "44° 25'", "e": "43° 85' e 85' = 1° 25' → 44° 25'."}, {"t": "43° 25'", "e": "Esqueceu de levar o 1° que veio dos 85'."}, {"t": "44° 85'", "e": "Levou 1° mas não tirou os 60' dos minutos."}, {"t": "43° 9'", "e": "Errou a soma dos minutos (47 + 38 = 85)."}]}, {"tipo": "mc", "cap": "Cap. 15", "p": "Quanto falta a 37° 24' 15'' para completar 90°? (Calcule 90° − 37° 24' 15''.)", "alts": [{"t": "52° 35' 45''", "e": "90° = 89° 59' 60''; 89° 59' 60'' − 37° 24' 15'' = 52° 35' 45''."}, {"t": "53° 24' 15''", "e": "Não dá para só trocar o grau: é preciso “pedir emprestado” 1° = 60' e 1' = 60''."}, {"t": "52° 36' 45''", "e": "Errou os minutos: 59' − 24' = 35'."}, {"t": "53° 35' 45''", "e": "Esqueceu que 1° foi transformado em minutos e segundos (sobram 89°)."}]}, {"tipo": "mc", "cap": "Cap. 15", "p": "Divida 7° 24' por 4.", "alts": [{"t": "1° 51'", "e": "7 : 4 = 1° e sobram 3° = 180'; 180' + 24' = 204'; 204' : 4 = 51'."}, {"t": "1° 6'", "e": "Esqueceu de transformar o resto (3°) em minutos."}, {"t": "1° 56'", "e": "Errou a divisão: 204 : 4 = 51."}, {"t": "1° 46'", "e": "Errou a divisão: 204 : 4 = 51."}]}, {"tipo": "mc", "cap": "Cap. 15", "p": "Duas pistas de taxiamento se cruzam (retas concorrentes) e um dos ângulos mede 128°. O ângulo oposto pelo vértice e um ângulo vizinho medem, respectivamente:", "alts": [{"t": "128° e 52°", "e": "O.p.v. tem a mesma medida (128°); o vizinho é suplementar: 180° − 128° = 52°."}, {"t": "52° e 128°", "e": "Está invertido: o oposto pelo vértice é igual (128°)."}, {"t": "128° e 128°", "e": "O vizinho não é igual: ele soma 180° com o de 128°."}, {"t": "62° e 128°", "e": "62° não aparece: o vizinho mede 52°."}]}, {"tipo": "mc", "cap": "Cap. 15", "p": "Duas retas paralelas r e s são cortadas por uma transversal. Dois ângulos alternos externos medem (5x − 12°) e (3x + 28°). Cada ângulo mede:", "alts": [{"t": "88°", "e": "Alternos são congruentes: 5x − 12 = 3x + 28 → x = 20 → 5 · 20 − 12 = 88°."}, {"t": "20°", "e": "20 é o valor de x, não a medida do ângulo."}, {"t": "92°", "e": "Seria o suplementar (180° − 88°); alternos são iguais, não somam 180°."}, {"t": "40°", "e": "40 é o valor de 2x."}]}, {"tipo": "mc", "cap": "Cap. 15", "p": "Na figura do livro (r // s), ĉ e f̂ são colaterais internos. Se ĉ = 3x e f̂ = x + 40°, quanto mede ĉ?", "alts": [{"t": "105°", "e": "Colaterais somam 180°: 3x + x + 40 = 180 → x = 35 → ĉ = 105°."}, {"t": "35°", "e": "35 é o valor de x."}, {"t": "75°", "e": "75° é a medida de f̂ (35 + 40)."}, {"t": "140°", "e": "Igualou os ângulos, mas colaterais são suplementares, não congruentes."}]}, {"tipo": "mc", "cap": "Cap. 16", "p": "O time A venceu 15 de 25 jogos e o time B venceu 21 de 30. Qual teve melhor aproveitamento?", "alts": [{"t": "O time B, com 70% de vitórias", "e": "15/25 = 0,6 = 60% e 21/30 = 0,7 = 70%."}, {"t": "O time A, com 60% de vitórias", "e": "60% é menor que 70%."}, {"t": "O time B, porque jogou mais partidas", "e": "Jogar mais não decide: é preciso comparar a razão vitórias/jogos."}, {"t": "Os dois tiveram o mesmo aproveitamento", "e": "As razões são diferentes (60% e 70%)."}]}, {"tipo": "mc", "cap": "Cap. 16", "p": "Um país tem 2 000 000 de habitantes e área de 80 000 km². A densidade demográfica é:", "alts": [{"t": "25 hab/km²", "e": "2 000 000 ÷ 80 000 = 25."}, {"t": "40 hab/km²", "e": "Inverteu ou errou a divisão: são 25."}, {"t": "2,5 hab/km²", "e": "Errou um zero: 2 000 000 ÷ 80 000 = 25."}, {"t": "250 hab/km²", "e": "Errou um zero: o resultado é 25."}]}, {"tipo": "mc", "cap": "Cap. 16", "p": "Um ciclista percorreu 18 km em 45 minutos. Sua velocidade média, em km/h, foi:", "alts": [{"t": "24 km/h", "e": "45 min = 0,75 h; 18 ÷ 0,75 = 24 km/h."}, {"t": "40 km/h", "e": "Dividiu errado: 18 ÷ 0,75 = 24."}, {"t": "0,4 km/h", "e": "0,4 é em km por MINUTO (18 ÷ 45), não km/h."}, {"t": "13,5 km/h", "e": "Multiplicou 18 por 0,75 em vez de dividir."}]}, {"tipo": "mc", "cap": "Cap. 16", "p": "A maquete de um hangar foi feita na escala 1 : 200. Se a altura real é 50 m, a altura na maquete é:", "alts": [{"t": "25 cm", "e": "50 m = 5 000 cm; 5 000 ÷ 200 = 25 cm."}, {"t": "250 cm", "e": "Errou um zero: 5 000 ÷ 200 = 25."}, {"t": "10 000 cm", "e": "Multiplicou por 200 em vez de dividir."}, {"t": "2,5 cm", "e": "Esqueceu de transformar 50 m em 5 000 cm."}]}, {"tipo": "mc", "cap": "Cap. 16", "p": "Na proporção (x + 1)/4 = 15/6, o valor de x é:", "alts": [{"t": "9", "e": "6 · (x + 1) = 4 · 15 → 6x + 6 = 60 → 6x = 54 → x = 9."}, {"t": "10", "e": "10 é o valor de x + 1, não de x."}, {"t": "11", "e": "Errou a equação: 6x = 54 → x = 9."}, {"t": "2,5", "e": "2,5 é a razão 15/6, não o x."}]}, {"tipo": "mc", "cap": "Cap. 17", "p": "7 metros de um tecido custam R$ 84,00. Quanto custam 12 metros do mesmo tecido?", "alts": [{"t": "R$ 144,00", "e": "Direta: 84 ÷ 7 = 12 por metro; 12 · 12 = R$ 144,00."}, {"t": "R$ 49,00", "e": "Fez uma conta “inversa”; mais metros custam mais."}, {"t": "R$ 89,00", "e": "Somou 5 em vez de manter a proporção."}, {"t": "R$ 168,00", "e": "Seria o preço de 14 m, o dobro de 7 m."}]}, {"tipo": "mc", "cap": "Cap. 17", "p": "Um celular de R$ 1.200,00 está com 25% de desconto. Ele sai por:", "alts": [{"t": "R$ 900,00", "e": "25% de 1 200 = 300; 1 200 − 300 = R$ 900,00 (ou 75% de 1 200)."}, {"t": "R$ 300,00", "e": "R$ 300,00 é só o valor do desconto."}, {"t": "R$ 1.175,00", "e": "Tirou 25 reais, e não 25%."}, {"t": "R$ 1.500,00", "e": "Isso seria um aumento de 25%."}]}, {"tipo": "mc", "cap": "Cap. 18", "p": "8 pintores pintam um muro em 15 dias. Em quanto tempo 12 pintores, no mesmo ritmo, pintam o mesmo muro?", "alts": [{"t": "10 dias", "e": "Inversa: 8 · 15 = 12 · t → 120 = 12t → t = 10 dias."}, {"t": "22,5 dias", "e": "Fez regra de três direta; mais pintores levam MENOS tempo."}, {"t": "11 dias", "e": "Errou a conta: 120 ÷ 12 = 10."}, {"t": "20 dias", "e": "Mais pintores não podem levar mais tempo."}]}];
+var rnd=mulberry32(21);
+Q.forEach(function(q){ if(q.alts){ q.alts.forEach(function(a,k){ a.id=k; }); q.ordem=embaralhar(q.alts,rnd); } if(q.tipo==='som'){ q.soma=q.itens.filter(function(x){return x.ok;}).reduce(function(s,x){return s+x.v;},0); } });
+var OBJ=Q.filter(function(q){return q.tipo!=='dis';}).length;
+var CHAVE=KIT+'_'+ETAPA+'_v1';
+var estado=lerJSON(CHAVE)||{resp:{},enviado:false};
+function salvar(){ gravarJSON(CHAVE,estado); carimbo(); }
+function respondida(i){ var q=Q[i], r=estado.resp[i]; if(r===undefined||r===null||r==='') return false; if(q.tipo==='dis') return String(r).trim().length>=3; return true; }
+function acertou(i){ var q=Q[i], r=estado.resp[i]; if(q.tipo==='som') return parseInt(r,10)===q.soma; if(q.tipo==='dis') return null; return r===0; }
+function render(){
+  var c=document.getElementById('questoes'); var h=''; var G=!!estado.gabarito;
+  Q.forEach(function(q,i){
+    var tipoTxt={mc:'Múltipla escolha',som:'Somatório',rom:'Números romanos',dis:'Discursiva'}[q.tipo||'mc'];
+    h+='<div class="q" id="q'+i+'"><span class="tipo '+(q.tipo||'mc')+'">'+tipoTxt+'</span> <span class="capq">'+q.cap+'</span><div class="num">Questão '+(i+1)+' de '+Q.length+'</div><h3>'+q.p+'</h3>';
+    if(q.tipo==='som'||q.tipo==='rom'){
+      q.itens.forEach(function(it){ var lab=q.tipo==='som'?('('+(it.v<10?'0':'')+it.v+') '):(it.n+'. '); h+='<div class="afirm'+(G?(it.ok?' ok':' no'):'')+'">'+lab+it.t+(G?'<div class="exp show">'+(it.ok?'✅ Verdadeira: ':'❌ Falsa: ')+it.e+'</div>':'')+'</div>'; });
+    }
+    if(q.tipo==='som'){
+      var r=estado.resp[i];
+      h+='<div class="soma">Soma das corretas: <input type="number" min="0" max="31" id="som'+i+'" value="'+(r!==undefined?esc(r):'')+'" '+(estado.enviado?'disabled':'')+' oninput="marcar('+i+',this.value)"> '+(G?(acertou(i)?'<span class="ok-t">✅ Correto: '+q.soma+'</span>':'<span class="no-t">❌ Você respondeu '+esc(r)+'; o certo é '+q.soma+'</span>'):'')+'</div>';
+    } else if(q.tipo==='dis'){
+      h+='<textarea id="dis'+i+'" '+(estado.enviado?'disabled':'')+' oninput="marcar('+i+',this.value)" placeholder="Escreva aqui a resolução, com as contas e a explicação...">'+esc(estado.resp[i]||'')+'</textarea>';
+      if(G) h+='<div class="modelo-d">'+q.modelo+'</div>';
+    } else {
+      q.ordem.forEach(function(a,k){ var sel=estado.resp[i]===a.id; var cls='alt'+(sel?' sel':'');
+        if(G){ if(a.id===0) cls+=' certa'; else if(sel) cls+=' marcada'; else cls+=' errada'; }
+        h+='<label class="'+cls+'"><input type="radio" name="q'+i+'" '+(sel?'checked':'')+' '+(estado.enviado?'disabled':'')+' onchange="marcar('+i+','+a.id+')"> <b>'+'abcd'[k]+')</b> '+a.t+(G?'<div class="exp">'+(a.id===0?'✅ Correta: ':(sel?'❌ Você marcou: ':'✖ '))+a.e+'</div>':'')+'</label>'; });
+    }
+    h+='</div>';
+  });
+  c.innerHTML=h; atualizarBarra(); if(estado.enviado) mostrarEnviado();
+}
+function marcar(i,v){ if(estado.enviado) return; estado.resp[i]=v; salvar(); if(Q[i].tipo==='mc'||Q[i].tipo==='rom'||!Q[i].tipo){ var labs=document.querySelectorAll('#q'+i+' .alt'); var ord=Q[i].ordem; for(var k=0;k<labs.length;k++) labs[k].classList.toggle('sel', ord[k].id===v); } atualizarBarra(); }
+function atualizarBarra(){ var n=0; Q.forEach(function(q,i){ if(respondida(i)) n++; }); document.getElementById('barra').style.width=(n/Q.length*100)+'%'; document.getElementById('cont').textContent=n+' de '+Q.length+' respondidas'; var b=document.getElementById('btn-enviar'); if(!estado.enviado){ b.disabled=n<Q.length; b.textContent=n<Q.length?'📨 Enviar ('+n+' de '+Q.length+' respondidas — responda todas)':'📨 Enviar respostas (não dá para voltar atrás)'; } }
+function enviar(){ if(estado.enviado) return; var n=0; Q.forEach(function(q,i){ if(respondida(i)) n++; }); if(n<Q.length) return;
+  mostrarModal('Enviar agora? Depois de enviar, as respostas ficam <b>travadas</b> e não dá para mudar.',true,function(){
+    var ac=0; Q.forEach(function(q,i){ if(acertou(i)===true) ac++; });
+    estado.acertos=ac; estado.objetivas=OBJ; estado.codigo=gerarCodigo(PREF,ac); estado.enviado=true; estado.enviadoEm=new Date().toISOString(); estado.concluido=true; estado.concluidoEm=estado.enviadoEm;
+    salvar(); render(); window.scrollTo({top:0,behavior:'smooth'}); marcarNav(); });
+  document.getElementById('modal-ok').textContent='Sim, enviar';
+}
+function mostrarEnviado(){
+  var b=document.getElementById('btn-enviar'); b.disabled=true; b.textContent='✅ Enviado — respostas travadas';
+  document.getElementById('codigo').classList.add('show'); document.getElementById('cod').textContent=estado.codigo;
+  document.getElementById('gab').classList.add('show'); var f=document.getElementById('fim'); if(f) f.style.display='block';
+  if(estado.gabarito) document.getElementById('gab-msg').innerHTML='<span style="color:var(--verde)">Gabarito aberto: '+estado.acertos+' acertos de '+OBJ+(OBJ<Q.length?' objetivas (+ discursiva para os pais corrigirem)':'')+'.</span>';
+}
+function abrirGab(){ var v=document.getElementById('gab-in').value.trim().toUpperCase(); var m=document.getElementById('gab-msg'); if(v===estado.codigo||v==='PAIS-77'){ estado.gabarito=true; salvar(); render(); } else { m.innerHTML='<span style="color:#ffb3b3">Código incorreto. Digite o código que apareceu no topo.</span>'; } }
+function exportar(){ baixarJSON(estado,NOME_ARQ); }
+function importar(ev){ var f=ev.target.files[0]; if(!f) return; var r=new FileReader(); r.onload=function(){ try{ var novo=JSON.parse(r.result); if(!novo.resp) throw 1; estado=novo; salvar(); render(); mostrarModal('✅ Progresso importado!',false);}catch(e){ mostrarModal('❌ Arquivo inválido.',false);} }; r.readAsText(f); }
+function pedirZerar(){ if(estado.enviado){ mostrarModal('Já foi enviado: as respostas ficam travadas (regra da prova). Para refazer do zero, os pais usam “Zerar o kit inteiro” no Início.',false); return; } mostrarModal('Apagar as respostas marcadas até agora?',true,function(){ estado={resp:{},enviado:false}; salvar(); render(); }); }
+marcarNav();
+if(checarTrava(ETAPA)){ render(); }
+</script>
+</body>
+</html>

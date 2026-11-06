@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumo · Torre de Controle · Matemática 7º</title>
+<style>
+:root{--bg:#0e1622;--bg2:#16212f;--bg3:#1c2a3b;--borda:#28394e;--borda2:#3a516b;--amarelo:#ffc933;--verde:#3ee08f;--laranja:#ff6b4a;--ceu:#5cc8ff;--texto:#eaf2fb;--cinza:#9fb0c3;--vermelho:#ff5d5d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:radial-gradient(1000px 500px at 50% -10%,#1d2d42,#0e1622 60%),var(--bg);color:var(--texto);line-height:1.65;font-size:17px;padding-bottom:60px}
+h1,h2,h3{font-family:'Trebuchet MS','Segoe UI',sans-serif;letter-spacing:.3px}
+.cod-voo{font-family:'Consolas','Lucida Console',monospace;letter-spacing:1px}
+header{padding:28px 18px 22px;text-align:center;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+header .selo{font-size:.78rem;letter-spacing:2px;color:#ffe9a6;text-transform:uppercase;font-family:'Consolas',monospace}
+header h1{font-size:1.75rem;margin:8px 0 4px}
+header p{color:#d6e2ef;font-size:.95rem}
+.pista{height:16px;background:#222c38;position:relative;box-shadow:0 3px 8px rgba(0,0,0,.45)}
+.pista:after{content:'';position:absolute;left:0;right:0;top:7px;height:3px;background:repeating-linear-gradient(90deg,var(--amarelo) 0 34px,transparent 34px 60px)}
+.wrap{max-width:880px;margin:0 auto;padding:16px}
+.barra-nav{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+.barra-nav a{flex:1 1 auto;text-align:center;text-decoration:none;color:var(--texto);background:var(--bg2);border:1px solid var(--borda);border-radius:10px;padding:8px 10px;font-size:.88rem}
+.barra-nav a.on{border-color:var(--amarelo);color:var(--amarelo);font-weight:bold}
+.barra-nav a.lock{opacity:.5;pointer-events:none;filter:grayscale(.7)}
+.intro{background:var(--bg2);border:1px solid var(--borda);border-radius:14px;padding:16px 18px;margin:14px 0}
+.intro h2{font-size:1.15rem;margin-bottom:8px;color:var(--amarelo)}
+.intro ol,.intro ul{margin:8px 0 0 22px}
+.painel{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:#122030;border:1px dashed var(--borda2);border-radius:12px;padding:10px 12px;margin:12px 0;font-size:.88rem;color:var(--cinza)}
+.painel .btns{display:flex;gap:6px;flex-wrap:wrap}
+button{font-family:inherit}
+.mini{background:var(--bg3);border:1px solid var(--borda2);color:var(--texto);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:.85rem}
+.mini:hover{border-color:var(--amarelo)}
+.postit{background:#ffe88a;color:#3a2a00;border-radius:4px;padding:12px 14px;box-shadow:3px 4px 10px rgba(0,0,0,.4);transform:rotate(-.8deg);margin:14px 0;font-size:.95rem}
+.postit b{color:#7a4a00}
+.alerta{background:#3a1712;border-left:5px solid var(--laranja);border-radius:0 12px 12px 0;padding:12px 14px;margin:14px 0;font-size:.95rem}
+.alerta b{color:#ffb39f}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(5,10,18,.86);z-index:60;align-items:center;justify-content:center;padding:16px}
+.modal-bg.show{display:flex}
+.modal{background:var(--bg2);border:2px solid var(--amarelo);border-radius:16px;padding:22px;max-width:440px;text-align:center}
+.modal .big{font-size:2.6rem}
+.modal p{margin-bottom:12px}
+.modal a,.modal button.ok{display:inline-block;background:var(--amarelo);color:#2a1d00;border:none;border-radius:10px;padding:10px 18px;font-weight:bold;text-decoration:none;cursor:pointer}
+.modal button.sec{background:transparent;border:1px solid var(--borda2);color:var(--texto);border-radius:10px;padding:10px 16px;margin-left:8px;cursor:pointer}
+.rodape{text-align:center;color:var(--cinza);font-size:.82rem;margin-top:26px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid var(--borda);padding:7px 9px;text-align:left;font-size:.9rem;vertical-align:top}
+th{background:#132233;color:var(--amarelo)}
+.trilha-fim{background:var(--bg2);border:2px solid var(--borda2);border-radius:14px;padding:16px;margin:20px 0;text-align:center}
+.trilha-fim .btn{display:inline-block;margin-top:10px;background:var(--verde);color:#032414;text-decoration:none;font-weight:bold;border-radius:10px;padding:10px 18px}
+.trilha-fim .btn.off{background:#2b3846;color:#7f8fa1;pointer-events:none}
+
+header{background:linear-gradient(120deg,#3a2a00,#5a3d00 40%,#0e2a3d 85%);border-bottom:4px solid var(--amarelo)}
+body{font-size:18px}
+.instr{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.instr a{display:block;text-align:center;text-decoration:none;color:var(--texto);background:#0b1520;border:2px solid var(--borda2);border-radius:50%/40%;padding:14px 8px;font-size:.88rem}
+.instr a b{display:block;font-size:1.6rem}
+.instr a:hover{border-color:var(--amarelo)}
+.sec{background:var(--bg2);border:1px solid var(--borda);border-radius:16px;padding:16px 18px;margin:20px 0}
+.sec h2{font-size:1.3rem;margin-bottom:4px}
+.sec .pp{font-size:.8rem;color:var(--cinza);margin-bottom:10px;font-family:Consolas,monospace}
+.sec.c15{border-left:6px solid #ffd76a}.sec.c15 h2{color:#ffd76a}
+.sec.c16{border-left:6px solid #7fd6ff}.sec.c16 h2{color:#7fd6ff}
+.sec.c17{border-left:6px solid #8ff0b8}.sec.c17 h2{color:#8ff0b8}
+.sec.c18{border-left:6px solid #ffab94}.sec.c18 h2{color:#ffab94}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:10px 0}
+.card{background:#101b28;border:1px solid var(--borda2);border-radius:12px;padding:12px}
+.card h3{font-size:1rem;color:var(--amarelo);margin-bottom:6px}
+.card p,.card li{font-size:.95rem}
+.card ul{margin-left:18px}
+.formula{display:block;text-align:center;background:#0b2a1d;border:1px solid var(--verde);color:#b9f5d4;border-radius:10px;padding:8px;margin:8px 0;font-weight:bold;font-family:Consolas,monospace}
+.passo{font-family:Consolas,monospace;background:#0b1520;border-radius:8px;padding:8px 10px;font-size:.92rem;margin:6px 0;white-space:pre-wrap}
+.flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0}
+.flip{perspective:800px;height:118px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flip.virada .in{transform:rotateY(180deg)}
+.flip .f,.flip .v{position:absolute;inset:0;backface-visibility:hidden;border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-size:.92rem}
+.flip .f{background:#132a40;border:2px solid var(--ceu);font-weight:bold;font-size:1.05rem}
+.flip .v{background:#0f3a24;border:2px solid var(--verde);transform:rotateY(180deg)}
+.dica-flip{font-size:.82rem;color:var(--cinza)}
+.tabela td,.tabela th{font-size:.9rem}
+.glossario dt{font-weight:bold;color:var(--amarelo);margin-top:8px}
+.glossario dd{margin-left:14px;font-size:.95rem}
+.fim-resumo{background:var(--bg2);border:2px solid var(--amarelo);border-radius:16px;padding:18px;margin:24px 0;text-align:center}
+.fim-resumo button{background:var(--verde);color:#032414;border:none;border-radius:12px;padding:13px 20px;font-weight:bold;font-size:1.02rem;cursor:pointer}
+.fim-resumo button:disabled{background:#2b3846;color:#7f8fa1;cursor:not-allowed}
+.fim-resumo .btn2{display:inline-block;margin-top:12px;background:#d62828;color:#fff;text-decoration:none;border-radius:12px;padding:11px 18px;font-weight:bold}
+.fim-resumo .btn2.off{background:#2b3846;color:#7f8fa1;pointer-events:none}
+.rolagem{position:fixed;right:10px;bottom:10px;background:#0b1520;border:1px solid var(--borda2);border-radius:20px;padding:4px 10px;font-size:.78rem;color:var(--cinza);z-index:30}
+</style>
+</head>
+<body>
+
+<header><div class="selo">Torre de Controle · Matemática 7º ano · CCF</div><h1>🗺️ Resumo — Painel de Instrumentos</h1><p>Tudo o que cai na prova de 12/11, em cards · Callis Matemática 7 (L1 cap. 15; L2 caps. 16, 17 e 18)</p></header><div class="pista"></div>
+<div class="wrap">
+<nav class="barra-nav" id="nav"><a href="leitura-guiada.html">📖 Leitura Guiada</a><a href="quiz.html" data-etapa="quiz" data-txt="🎯 Quiz">🎯 Quiz</a><a class="on" href="resumo.html">🗺️ Resumo</a><a href="simulado.html" data-etapa="simulado" data-txt="📝 Simulado">📝 Simulado</a><a href="index.html">🏠 Torre (início)</a></nav>
+<div class="intro"><h2>🎛️ Painel de Instrumentos</h2><p>Use este painel para fechar as dúvidas que o Quiz mostrou. Vire as cartas (toque nelas), leia os post-its amarelos e os alertas de pegadinha. Leia <b>até o fim</b> e clique em <b>“✅ Li o resumo até o fim”</b> para destravar o <b>📝 Simulado</b>.</p></div>
+<div class="painel"><span id="salvo">💾 Progresso salvo automaticamente neste aparelho.</span><div class="btns"><button class="mini" onclick="exportar()">📥 Exportar progresso</button><button class="mini" onclick="document.getElementById('imp').click()">📤 Importar progresso</button><input type="file" id="imp" accept="application/json" style="display:none" onchange="importar(event)"><button class="mini" onclick="pedirZerar()">🗑️ Zerar tudo</button></div></div>
+<div class="instr"><a href="#s15"><b>🧭</b>Ângulos<br>(Cap. 15)</a><a href="#s16"><b>📊</b>Razão<br>(Cap. 16)</a><a href="#s17"><b>📈</b>Proporção direta<br>(Cap. 17)</a><a href="#s18"><b>🔄</b>Proporção inversa<br>(Cap. 18)</a><a href="#glo"><b>📚</b>Glossário</a></div>
+
+<div class="sec c15" id="s15"><h2>🧭 Cap. 15 — Ângulos</h2><div class="pp">Livro 1 · pp. 324-340</div>
+ <div class="cards">
+  <div class="card"><h3>Graus, minutos e segundos</h3><span class="formula">1° = 60'   ·   1' = 60''</span><p>Graus → minutos: <b>× 60</b>. Minutos → segundos: <b>× 60</b>. Para voltar: <b>÷ 60</b> (o resto fica na unidade menor).</p><div class="passo">10° 32' = 600' + 32' = 632'
+7 387'' = 123' 7'' = 2° 3' 7''</div><p>0,5° = 30' · 0,5' = 30''</p></div>
+  <div class="card"><h3>Adição</h3><p>Segundos com segundos, minutos com minutos, graus com graus. Depois troque: <b>60'' → 1'</b> e <b>60' → 1°</b>.</p><div class="passo">56° 45' 58'' + 12° 59' 47''
+= 68° 104' 105''
+= 69° 45' 45''</div></div>
+  <div class="card"><h3>Subtração</h3><p>Se não der para tirar, “peça emprestado”: <b>1° = 60'</b> (ou 1' = 60'').</p><div class="passo">4° 5' − 2° 25'
+= 3° 65' − 2° 25' = 1° 40'</div></div>
+  <div class="card"><h3>Multiplicação</h3><p>Multiplique cada parte e faça as trocas.</p><div class="passo">(5° 12' 22'') · 5
+= 25° 60' 110'' = 26° 1' 50''</div></div>
+  <div class="card"><h3>Divisão</h3><p>Ordem: <b>graus → minutos → segundos</b>. O resto vira a unidade seguinte (× 60).</p><div class="passo">(15° 9' 28'') : 2 = 7° 34' 44''</div></div>
+  <div class="card"><h3>Opostos pelo vértice (o.p.v.)</h3><p>Duas retas concorrentes formam 4 ângulos. <b>Opostos pelo vértice = mesma medida.</b> Vizinhos = <b>somam 180°</b>.</p><div class="passo">Se um mede 50°: oposto 50°,
+vizinhos 130° e 130°.</div></div>
+ </div>
+ <div class="postit">📌 <b>Dica de prova:</b> o resultado final nunca pode ter 60 ou mais minutos ou segundos. Sempre faça as trocas!</div>
+ <div class="cards">
+  <div class="card" style="text-align:center"><h3>Paralelas r // s cortadas pela transversal t</h3><svg viewBox="0 0 320 270" width="300" style="max-width:100%;height:auto;background:#0b1520;border:1px solid #28394e;border-radius:12px" role="img" aria-label="Retas paralelas r e s cortadas pela transversal t, com os oito ângulos"><line x1="20" y1="82" x2="300" y2="82" stroke="#5cc8ff" stroke-width="3"/><text x="304" y="87" fill="#5cc8ff" font-size="16" font-weight="bold">r</text><line x1="20" y1="192" x2="300" y2="192" stroke="#5cc8ff" stroke-width="3"/><text x="304" y="197" fill="#5cc8ff" font-size="16" font-weight="bold">s</text><line x1="218" y1="10" x2="62" y2="262" stroke="#ffc933" stroke-width="3"/><text x="222" y="22" fill="#ffc933" font-size="16" font-weight="bold">t</text><circle cx="154" cy="53" r="13" fill="#ffc933" opacity=".35"/><text x="150" y="58" fill="#ffc933" font-size="17" font-weight="bold" font-family="Trebuchet MS">a&#770;</text><text x="202" y="58" fill="#eaf2fb" font-size="17" font-weight="bold" font-family="Trebuchet MS">b&#770;</text><text x="128" y="104" fill="#eaf2fb" font-size="17" font-weight="bold" font-family="Trebuchet MS">d&#770;</text><text x="178" y="108" fill="#eaf2fb" font-size="17" font-weight="bold" font-family="Trebuchet MS">c&#770;</text><circle cx="107" cy="163" r="13" fill="#ffc933" opacity=".35"/><text x="103" y="168" fill="#ffc933" font-size="17" font-weight="bold" font-family="Trebuchet MS">e&#770;</text><text x="150" y="168" fill="#eaf2fb" font-size="17" font-weight="bold" font-family="Trebuchet MS">f&#770;</text><text x="72" y="214" fill="#eaf2fb" font-size="17" font-weight="bold" font-family="Trebuchet MS">h&#770;</text><text x="130" y="218" fill="#eaf2fb" font-size="17" font-weight="bold" font-family="Trebuchet MS">g&#770;</text></svg><p style="text-align:left"><b>Internos:</b> d̂, ĉ, ê, f̂ · <b>Externos:</b> â, b̂, ĥ, ĝ.<br>Transversal = reta que corta duas ou mais retas em pontos distintos.</p></div>
+  <div class="card"><h3>Os 3 tipos de pares</h3><table class="tabela"><tr><th>Tipo</th><th>Pares (figura do livro)</th><th>Medidas</th></tr><tr><td>Correspondentes</td><td>â-ê · b̂-f̂ · ĉ-ĝ · d̂-ĥ</td><td><b>iguais</b></td></tr><tr><td>Alternos internos</td><td>d̂-f̂ · ĉ-ê</td><td><b>iguais</b></td></tr><tr><td>Alternos externos</td><td>â-ĝ · b̂-ĥ</td><td><b>iguais</b></td></tr><tr><td>Colaterais internos</td><td>ĉ-f̂ · d̂-ê</td><td><b>somam 180°</b></td></tr><tr><td>Colaterais externos</td><td>â-ĥ · b̂-ĝ</td><td><b>somam 180°</b></td></tr></table><p style="margin-top:6px"><b>Alternos</b> = lados opostos da transversal. <b>Colaterais</b> = mesmo lado.</p></div>
+ </div>
+ <p class="dica-flip">👆 Toque na carta para ver a resposta:</p>
+ <div class="flips"><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">â e ê</div><div class="v">Correspondentes<br>→ iguais</div></div></div><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">d̂ e f̂</div><div class="v">Alternos internos<br>→ iguais</div></div></div><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">b̂ e ĥ</div><div class="v">Alternos externos<br>→ iguais</div></div></div><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">ĉ e f̂</div><div class="v">Colaterais internos<br>→ somam 180°</div></div></div><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">â e ĥ</div><div class="v">Colaterais externos<br>→ somam 180°</div></div></div><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">2 ângulos o.p.v.</div><div class="v">Mesma medida<br>(congruentes)</div></div></div></div>
+ <div class="card"><h3>Como resolver “ache o x”</h3><p>1) Descubra o tipo de par. 2) Se são <b>iguais</b> (o.p.v., correspondentes, alternos), <b>iguale</b> as expressões. 3) Se são <b>suplementares</b> (vizinhos, colaterais), <b>some e iguale a 180°</b>. 4) Substitua o x para achar o ângulo.</p><div class="passo">Alternos externos: 3x − 20 = 2x + 20 → x = 40 → 100°
+Colaterais internos: 4x + 30 + x + 20 = 180 → x = 26 → 134° e 46°</div></div>
+ <div class="alerta">⚠️ <b>Pegadinha:</b> o valor de <b>x</b> não é a medida do ângulo! Depois de achar o x, substitua na expressão.</div>
+</div>
+
+<div class="sec c16" id="s16"><h2>📊 Cap. 16 — Razão</h2><div class="pp">Livro 2 · pp. 8-20</div>
+ <div class="cards">
+  <div class="card"><h3>Razão</h3><span class="formula">razão = a ÷ b   (b ≠ 0)</span><p>Compara duas grandezas. Pode ser fração (3/5), decimal (0,6) ou porcentagem (60%).</p><p><b>Nicolas</b> 8 de 12 = 24/36 · <b>Gabriel</b> 10 de 18 = 20/36 → Nicolas teve melhor aproveitamento, mesmo acertando menos.</p></div>
+  <div class="card"><h3>Densidade demográfica</h3><span class="formula">habitantes ÷ área (km²)</span><p>Goiás ≈ 20 hab/km² · Pará ≈ 7 hab/km². Menos habitantes pode significar <b>mais concentração</b>.</p></div>
+  <div class="card"><h3>Velocidade média</h3><span class="formula">distância ÷ tempo</span><p>Unidades: m/s ou km/h. Bolt: 100 m em 9,81 s ≈ 10,19 m/s. <b>Cuidado com as unidades:</b> 45 km em 10 min = 45 000 m ÷ 600 s = 75 m/s.</p></div>
+  <div class="card"><h3>Escala</h3><span class="formula">medida da representação ÷ medida real</span><p>Mesma unidade! 1 : 45 000 000 → 1 cm = 45 000 000 cm = 450 km. Miniatura 1 : 25 de 12 cm → 300 cm = 3 m.</p></div>
+  <div class="card"><h3>Qual compra vale mais a pena?</h3><p>Divida <b>preço ÷ massa</b>. Melancia inteira: 0,24 centavo/g. Picada: 1,60 centavo/g → a inteira é mais barata por grama.</p></div>
+  <div class="card"><h3>Proporção</h3><span class="formula">a/b = c/d  →  a · d = b · c</span><p>“a está para b assim como c está para d”. <b>Extremos:</b> a e d. <b>Meios:</b> b e c. <b>Propriedade fundamental:</b> produto dos extremos = produto dos meios.</p><div class="passo">3 · (x + 3) = 2 · (2x − 7)
+3x + 9 = 4x − 14 → x = 23</div></div>
+ </div>
+ <div class="postit">📌 <b>Dica de prova:</b> para dizer quem foi “melhor”, “mais concorrido” ou “mais concentrado”, calcule a razão de cada um e compare. Nunca compare só o número maior!</div>
+ <div class="alerta">⚠️ <b>Pegadinha:</b> escala é <b>representação ÷ real</b> (não o contrário). E os meios são <b>b e c</b>, não a e d.</div>
+</div>
+
+<div class="sec c17" id="s17"><h2>📈 Cap. 17 — Proporção direta, regra de três e porcentagem</h2><div class="pp">Livro 2 · pp. 30-44</div>
+ <div class="cards">
+  <div class="card"><h3>Proporção direta</h3><p>Uma grandeza × (ou ÷) um número → a outra também × (ou ÷) pelo <b>mesmo número</b>.</p><span class="formula">x / y = k</span><p>Cestas ÷ artesãos = 54/3 = 108/6 = 18 → cada artesão faz 18 cestas.</p></div>
+  <div class="card"><h3>Interpretar o k</h3><p>Pense no que foi dividido: R$ ÷ kg = <b>preço por quilo</b>; produção ÷ trabalhadores = <b>produtividade</b>; g de CO₂ ÷ km = <b>g por km</b> (4 750 ÷ 50 = 95 g/km).</p></div>
+  <div class="card"><h3>Regra de três direta</h3><p>4 valores, 2 grandezas, 1 desconhecido. Setas <b>no mesmo sentido</b>. Multiplique em cruz.</p><div class="passo">14 dias → R$ 6 300
+ 9 dias → s
+14s = 9 · 6 300 → s = 4 050</div></div>
+  <div class="card"><h3>Porcentagem</h3><span class="formula">35% = 35/100</span><p>Parte: 60 de 80 = 3/4 = <b>75%</b>. Porcentagem de: 85% de 1 500 = 0,85 · 1 500 = <b>1 275</b>.</p></div>
+  <div class="card"><h3>Aumentos e reduções</h3><p>Redução de 20% → pague <b>80%</b>. Aumento de 20% → pague <b>120%</b>.</p><div class="passo">R$ 6,00 −20% → R$ 4,80
+R$ 4,80 +20% → R$ 5,76 (não volta!)</div></div>
+  <div class="card"><h3>Porcentagem de porcentagem</h3><p>Multiplique em sequência: 77% de 21% de 65% = 0,77 · 0,21 · 0,65 ≈ 0,105 = <b>10,5%</b>.</p><p>+10% e depois −10% → 1,1 · 0,9 = 0,99 → <b>redução de 1%</b>.</p></div>
+ </div>
+ <div class="postit">📌 <b>Dica de prova:</b> a professora pede <b>“mostre os cálculos”</b>. Na regra de três, escreva a tabelinha com as setas antes da conta.</div>
+</div>
+
+<div class="sec c18" id="s18"><h2>🔄 Cap. 18 — Proporção inversa</h2><div class="pp">Livro 2 · pp. 54-60</div>
+ <div class="cards">
+  <div class="card"><h3>Proporção inversa</h3><p>Uma grandeza × um número → a outra <b>÷ pelo mesmo número</b>. 20 km/h → 4 h; 40 km/h → 2 h; 80 km/h → 1 h.</p><span class="formula">X · Y = k</span><p>20 · 4 = 40 · 2 = 80 · 1 = 80 → k = distância (80 km). A 100 km/h: 100 · x = 80 → 0,8 h = 48 min.</p></div>
+  <div class="card"><h3>Regra de três inversa</h3><p>Setas em <b>sentidos opostos</b>. Multiplique cada valor pelo seu par (o produto é constante).</p><div class="passo">45 operários → 16 dias
+ y operários → 12 dias
+16 · 45 = 12 · y → y = 60</div></div>
+  <div class="card"><h3>Não é inversa simples!</h3><p><b>Força gravitacional:</b> inversa <b>quadrática</b> (raio pela metade → força × 4). <b>Lei de Boyle:</b> temperatura constante, pressão dobra → volume cai à metade.</p></div>
+ </div>
+ <p class="dica-flip">👆 Direta ou inversa? Toque para conferir:</p>
+ <div class="flips"><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">Pães comprados e preço pago</div><div class="v">📈 Direta</div></div></div><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">Velocidade e tempo (mesmo percurso)</div><div class="v">🔄 Inversa</div></div></div><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">Torneiras iguais e tempo para encher</div><div class="v">🔄 Inversa</div></div></div><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">Artesãos e brinquedos por dia</div><div class="v">📈 Direta</div></div></div><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">Operários e dias de obra</div><div class="v">🔄 Inversa</div></div></div><div class="flip" onclick="this.classList.toggle('virada')"><div class="in"><div class="f">Funcionários e horas de produção</div><div class="v">🔄 Inversa</div></div></div></div>
+ <div class="alerta">⚠️ <b>Pegadinha:</b> “mais operários → menos dias” é <b>inversa</b>. Se você fizer regra de três direta, a resposta sai absurda (mais operários levando mais tempo). Sempre pergunte: <i>faz sentido?</i></div>
+ <div class="card"><h3>Direta × Inversa (quadro comparativo)</h3><table class="tabela"><tr><th></th><th>📈 Direta</th><th>🔄 Inversa</th></tr><tr><td>Uma aumenta…</td><td>a outra aumenta</td><td>a outra diminui</td></tr><tr><td>Constante</td><td>x ÷ y = k</td><td>X · Y = k</td></tr><tr><td>Setas</td><td>mesmo sentido</td><td>sentidos opostos</td></tr><tr><td>Exemplo</td><td>kg de arroz × preço</td><td>velocidade × tempo</td></tr></table></div>
+</div>
+
+<div class="sec" id="glo"><h2 style="color:var(--amarelo)">📚 Glossário</h2><dl class="glossario">
+ <dt>Minuto (')</dt><dd>1/60 do grau. 1° = 60'.</dd>
+ <dt>Segundo ('')</dt><dd>1/60 do minuto. 1' = 60''.</dd>
+ <dt>Retas concorrentes</dt><dd>Retas que se cruzam (perpendiculares ou oblíquas).</dd>
+ <dt>Opostos pelo vértice (o.p.v.)</dt><dd>Ângulos cujas semirretas são opostas às do outro; têm a mesma medida.</dd>
+ <dt>Transversal</dt><dd>Reta que corta duas ou mais retas em pontos distintos.</dd>
+ <dt>Congruentes (≡)</dt><dd>Que têm a mesma medida.</dd>
+ <dt>Suplementares</dt><dd>Dois ângulos que somam 180°.</dd>
+ <dt>Razão</dt><dd>Quociente entre dois números a e b, com b ≠ 0.</dd>
+ <dt>Razão de semelhança</dt><dd>Razão igual entre os lados de figuras proporcionais (uma é ampliação da outra).</dd>
+ <dt>Proporção</dt><dd>Igualdade entre razões: a/b = c/d.</dd>
+ <dt>Extremos e meios</dt><dd>Em a/b = c/d, extremos são a e d; meios são b e c.</dd>
+ <dt>Constante de proporcionalidade (k)</dt><dd>Direta: x ÷ y = k. Inversa: X · Y = k.</dd>
+ <dt>Regra de três simples</dt><dd>Algoritmo para achar o 4º valor quando se conhecem 3, com duas grandezas proporcionais.</dd>
+ <dt>Porcentagem</dt><dd>Fração de denominador 100.</dd>
+</dl></div>
+
+<div class="fim-resumo" id="fim-resumo"><h3 style="margin-bottom:8px">🏁 Chegou ao fim do painel?</h3><p id="fim-txt" style="margin-bottom:10px">Role até o fim da página para liberar o botão.</p><button id="btn-li" disabled onclick="liAteOFim()">✅ Li o resumo até o fim</button><br><a class="btn2 off" id="btn-sim" href="simulado.html">📝 Pronto para o Simulado!</a></div>
+<div class="rodape">Feito com carinho para o jovem aprendiz. ✈️ Boa prova!</div>
+</div>
+<div class="rolagem" id="rolagem">📜 0%</div>
+<div class="modal-bg" id="lock"><div class="modal"><div class="big">🔒</div><p><b>Esta etapa ainda está trancada.</b></p><p id="lock-txt"></p><a href="index.html">Voltar ao início</a></div></div><div class="modal-bg" id="modal"><div class="modal"><p id="modal-txt"></p><button class="ok" id="modal-ok">Ok</button><button class="sec" id="modal-cancel" style="display:none">Cancelar</button></div></div>
+<script>
+var KIT='torre_ctrl_m7';
+var TRILHA=[
+ {id:'leitura', chave:KIT+'_leitura_v1', nome:'Leitura Guiada', arquivo:'leitura-guiada.html', emoji:'📖'},
+ {id:'quiz', chave:KIT+'_quiz_v1', nome:'Quiz', arquivo:'quiz.html', emoji:'🎯'},
+ {id:'resumo', chave:KIT+'_resumo_v1', nome:'Resumo', arquivo:'resumo.html', emoji:'🗺️'},
+ {id:'simulado', chave:KIT+'_simulado_v1', nome:'Simulado', arquivo:'simulado.html', emoji:'📝'}
+];
+var MEM={};
+function lerJSON(k){ try{ var s=localStorage.getItem(k); return s?JSON.parse(s):(MEM[k]?JSON.parse(MEM[k]):null); }catch(e){ return MEM[k]?JSON.parse(MEM[k]):null; } }
+function gravarJSON(k,v){ var s=JSON.stringify(v); try{ localStorage.setItem(k,s); }catch(e){ MEM[k]=s; } }
+function trilhaLiberada(){ var t=lerJSON(KIT+'_trilha_v1'); return !!(t&&t.liberadoPelosPais); }
+function etapa(id){ return TRILHA.filter(function(t){return t.id===id;})[0]; }
+function etapaConcluida(id){ var d=lerJSON(etapa(id).chave); return !!(d&&d.concluido); }
+function idxEtapa(id){ return TRILHA.map(function(t){return t.id;}).indexOf(id); }
+function podeAbrir(id){ var i=idxEtapa(id); if(i<=0||trilhaLiberada()) return true; return etapaConcluida(TRILHA[i-1].id); }
+function marcarNav(){
+  var links=document.querySelectorAll('#nav a[data-etapa]');
+  for(var i=0;i<links.length;i++){ var id=links[i].getAttribute('data-etapa'); var t=links[i].getAttribute('data-txt');
+    if(!podeAbrir(id)){ links[i].classList.add('lock'); links[i].textContent='🔒 '+t; links[i].title='Ainda trancado'; }
+    else { links[i].classList.remove('lock'); links[i].textContent=t; links[i].title=''; } }
+}
+function textoTrava(id){
+  var nomes=[]; var i=idxEtapa(id);
+  for(var k=0;k<i;k++){ if(!etapaConcluida(TRILHA[k].id)) nomes.push(TRILHA[k].nome); }
+  return 'Para abrir '+(id==='quiz'?'o Quiz':id==='resumo'?'o Resumo':'o Simulado')+', conclua antes: '+nomes.join(', ')+'.';
+}
+function checarTrava(id){
+  if(podeAbrir(id)) return true;
+  document.getElementById('lock-txt').textContent=textoTrava(id);
+  document.getElementById('lock').classList.add('show');
+  var w=document.querySelector('.wrap'); w.style.filter='blur(9px)'; w.style.pointerEvents='none'; w.setAttribute('aria-hidden','true');
+  return false;
+}
+
+function mostrarModal(txt,confirmar,fn){ document.getElementById('modal-txt').innerHTML=txt; document.getElementById('modal').classList.add('show'); var c=document.getElementById('modal-cancel'); c.style.display=confirmar?'inline-block':'none'; c.onclick=fecharModal; var ok=document.getElementById('modal-ok'); ok.textContent=confirmar?'Sim, apagar':'Ok'; ok.onclick=function(){ fecharModal(); if(fn) fn(); }; }
+function fecharModal(){ document.getElementById('modal').classList.remove('show'); }
+function carimbo(){ var d=new Date(); var el=document.getElementById('salvo'); if(el) el.textContent='💾 Salvo às '+d.toLocaleTimeString('pt-BR')+' de '+d.toLocaleDateString('pt-BR'); }
+function baixarJSON(obj,nome){ var blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nome; document.body.appendChild(a); a.click(); a.remove(); }
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0; var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function embaralhar(arr,rnd){ var a=arr.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(rnd()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+var LETRAS='ABCDEFGHJKLMNPQRSTUVWXYZ';
+function gerarCodigo(pref,ac){ var xx=(ac<10?'0':'')+ac; return pref+'-'+xx+'-'+LETRAS[Math.floor(Math.random()*LETRAS.length)]+LETRAS[Math.floor(Math.random()*LETRAS.length)]; }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+
+var CHAVE=KIT+'_resumo_v1';
+var estado=lerJSON(CHAVE)||{rolagemMax:0};
+function salvar(){ gravarJSON(CHAVE,estado); carimbo(); }
+function pctRolagem(){ var d=document.documentElement; var tot=d.scrollHeight-window.innerHeight; if(tot<=0) return 100; return Math.min(100,Math.round(window.scrollY/tot*100)); }
+function atualizar(){ var p=pctRolagem(); if(p>(estado.rolagemMax||0)){ estado.rolagemMax=p; salvar(); } document.getElementById('rolagem').textContent='📜 '+(estado.rolagemMax||0)+'%';
+  var b=document.getElementById('btn-li'), t=document.getElementById('fim-txt'), s=document.getElementById('btn-sim');
+  if(estado.concluido){ b.disabled=true; b.textContent='✅ Resumo lido em '+new Date(estado.concluidoEm).toLocaleString('pt-BR'); t.textContent='Simulado destravado! Boa sorte no voo solo.'; s.classList.remove('off'); }
+  else if((estado.rolagemMax||0)>=90){ b.disabled=false; t.textContent='Você chegou ao fim. Clique para confirmar a leitura.'; s.classList.add('off'); }
+  else { b.disabled=true; t.textContent='Role até o fim da página para liberar o botão (agora: '+(estado.rolagemMax||0)+'%).'; s.classList.add('off'); }
+  if(trilhaLiberada()) s.classList.remove('off');
+}
+function liAteOFim(){ if((estado.rolagemMax||0)<90) return; estado.concluido=true; estado.concluidoEm=new Date().toISOString(); salvar(); atualizar(); marcarNav(); }
+function exportar(){ baixarJSON(estado,'resumo_torre-de-controle.json'); }
+function importar(ev){ var f=ev.target.files[0]; if(!f) return; var r=new FileReader(); r.onload=function(){ try{ var n=JSON.parse(r.result); if(typeof n!=='object') throw 1; estado=n; salvar(); atualizar(); mostrarModal('✅ Progresso importado!',false);}catch(e){ mostrarModal('❌ Arquivo inválido.',false);} }; r.readAsText(f); }
+function pedirZerar(){ mostrarModal('Zerar a contagem de rolagem deste Resumo? (Se ele já foi concluído, o Simulado continua destravado.)',true,function(){ var c=estado.concluido, ce=estado.concluidoEm; estado={rolagemMax:0}; if(c){estado.concluido=true; estado.concluidoEm=ce;} salvar(); atualizar(); }); }
+marcarNav();
+if(checarTrava('resumo')){ window.addEventListener('scroll',atualizar,{passive:true}); window.addEventListener('resize',atualizar); atualizar(); }
+</script>
+</body>
+</html>
